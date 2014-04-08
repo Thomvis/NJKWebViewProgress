@@ -145,8 +145,10 @@ static const float afterInteractiveMaxProgressValue = 0.9;
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    if ([_webViewProxyDelegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
-        [_webViewProxyDelegate webView:webView didFailLoadWithError:error];
+    if (! [[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey] isEqualToString:completeRPCURL]) {
+        if ([_webViewProxyDelegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
+            [_webViewProxyDelegate webView:webView didFailLoadWithError:error];
+        }
     }
     
     _loadingCount--;
